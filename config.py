@@ -3,16 +3,24 @@
 (совместима с импортом: from config import BOT_TOKEN, POST_CHANNEL_ID)
 """
 import os
+import sys
 
 # === Telegram credentials (env overrides) ===
-# Поддерживаем оба имени переменной для совместимости:
-# - TELEGRAM_BOT_TOKEN (новый)
-# - TELEGRAM_TOKEN (старый)
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("TELEGRAM_TOKEN") or "8292684103:AAH0TKL-lCOaKVeppjtAdmsx0gdeMrGtjdQ"
-POST_CHANNEL_ID = os.getenv("POST_CHANNEL_ID", "-1002566537425")
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+if not BOT_TOKEN:
+    sys.stderr.write("❌ TELEGRAM_BOT_TOKEN не задан в переменных окружения!\n")
+    sys.exit(1)
+
+POST_CHANNEL_ID = os.getenv("POST_CHANNEL_ID")
+if not POST_CHANNEL_ID:
+    sys.stderr.write("❌ POST_CHANNEL_ID не задан в переменных окружения!\n")
+    sys.exit(1)
 
 # Flask secret key
-FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "937e8b2ac366e9a9f16659f9911609d5e53fc6708e969a42b96500d744391534")
+FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
+if not FLASK_SECRET_KEY:
+    sys.stderr.write("❌ FLASK_SECRET_KEY не задан в переменных окружения!\n")
+    sys.exit(1)
 
 # Конфигурация окружения
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
@@ -32,8 +40,8 @@ SECURITY_CONFIG = {
     "rate_limit_per_minute": int(os.getenv("RATE_LIMIT", "20")),
     "max_failed_attempts": 5,
     "block_duration_hours": 24,
-    "jwt_secret": os.getenv("JWT_SECRET", "your-secret-key-change-in-production"),
-    "encryption_key": os.getenv("ENCRYPTION_KEY", "your-encryption-key"),
+    "jwt_secret": os.getenv("JWT_SECRET"),
+    "encryption_key": os.getenv("ENCRYPTION_KEY"),
 }
 
 # Настройки логирования
@@ -66,23 +74,23 @@ BOT_CONFIG = {
     "name": os.getenv("BOT_NAME", "Shop Bot"),
     "version": "1.0",
     "description": "Телеграм-бот для интернет-магазина",
-    "bot_username": "Safar_call_bot",
+    "bot_username": os.getenv("BOT_USERNAME", "YourBot"),
     "currency": os.getenv("CURRENCY", "USD"),
     "currency_symbol": os.getenv("CURRENCY_SYMBOL", "$"),
     "webhook_url": os.getenv("WEBHOOK_URL"),
     "webhook_secret": os.getenv("WEBHOOK_SECRET"),
     "max_message_length": 4096,
     "request_timeout": 30,
-    "admin_telegram_id": os.getenv("ADMIN_TELEGRAM_ID", "5720497431"),
-    "admin_name": "Safar",
-    "post_channel_id": "-1002566537425",
+    "admin_telegram_id": os.getenv("ADMIN_TELEGRAM_ID"),
+    "admin_name": os.getenv("ADMIN_NAME", "Admin"),
+    "post_channel_id": POST_CHANNEL_ID,
 }
 
 # Контактная информация
 CONTACT_INFO = {
-    "support_phone": os.getenv("SUPPORT_PHONE", "+998901234567"),
-    "support_telegram": os.getenv("SUPPORT_TELEGRAM", "@Safar_call_bot"),
-    "call_center_phone": os.getenv("CALL_CENTER_PHONE", "+998901234567"),
+    "support_phone": os.getenv("SUPPORT_PHONE", "+000000000"),
+    "support_telegram": os.getenv("SUPPORT_TELEGRAM", "@YourSupportBot"),
+    "call_center_phone": os.getenv("CALL_CENTER_PHONE", "+000000000"),
     "working_hours": os.getenv("WORKING_HOURS", "9:00 - 18:00 (Пн-Пт)"),
 }
 

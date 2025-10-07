@@ -16,7 +16,10 @@ from database import DatabaseManager
 from bot_integration import TelegramBotIntegration
 
 app = Flask(__name__)
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-change-in-production')
+
+# Загружаем секретный ключ из config
+from config import FLASK_SECRET_KEY
+app.secret_key = FLASK_SECRET_KEY
 
 # Инициализация
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1613,13 +1616,11 @@ def financial_page():
 
 
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render передаёт свой порт
-    debug = os.getenv("FLASK_DEBUG", "0") == "1"  # локально можно FLASK_DEBUG=1
-    app.run(host="0.0.0.0", port=port, debug=debug)
-
-
-
 @app.get("/healthz")
 def healthz():
     return "ok", 200
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.getenv("FLASK_DEBUG", "0") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug)
